@@ -38,7 +38,6 @@ int main()
 	pthread_join(thread, NULL);
 }
 
-
 void run_kbd_hook()
 {	g_logic.kbd_hook = SetWindowsHookExA(WH_KEYBOARD_LL, kbd_hook_proc, NULL, 0);
 	assert(g_logic.kbd_hook);
@@ -52,11 +51,11 @@ LRESULT CALLBACK kbd_hook_proc(int code, WPARAM param1, LPARAM param2)
 	{
 #pragma push_macro("_")
 #define _(lower, upper) case VK_##upper: g_logic.pressed_keys.lower = param1 == WM_KEYDOWN; break;
-		_(right, RIGHT)
-		_(left, LEFT)
-		_(up, UP)
-		_(down, DOWN)
-		_(escape, ESCAPE)
+			_(right, RIGHT)
+			_(left, LEFT)
+			_(up, UP)
+			_(down, DOWN)
+			_(escape, ESCAPE)
 		case VK_RETURN:
 			if(param1 == WM_KEYFIRST)
 				g_logic.mouse_follow_mode = !g_logic.mouse_follow_mode;

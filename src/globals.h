@@ -8,12 +8,10 @@
 #include <stdbool.h>
 
 extern struct g_logic_struct
-{
-	HWND window;
+{	HWND window;
 	HHOOK kbd_hook;
 	bool mouse_follow_mode;
 	struct
-	{
-		bool left, right, up, down, escape;
+	{	bool left, right, up, down, escape;
 	} pressed_keys;
 } g_logic;

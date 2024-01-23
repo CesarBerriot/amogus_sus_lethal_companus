@@ -7,8 +7,8 @@
 #include <math.h>
 #include "data structures/vec2/vec2.h"
 
-struct g_amogus_struct g_amogus = {
-	{}
+struct g_amogus_struct g_amogus =
+{	{}
 	, {
 		{ 16, 0 }
 		, { 25, 0 }
@@ -40,13 +40,11 @@ struct g_amogus_struct g_amogus = {
 };
 
 void amogus_init()
-{
-	bool is_width_larger; // whether the width is larger than the height
+{	bool is_width_larger; // whether the width is larger than the height
 	size_t width = 0, height = 0;
 
 	for(size_t i = 0; i < AMOGUS_POINTS_LEN; ++i)
-	{
-		g_amogus.points[i].x *= AMOGUS_SCALE;
+	{	g_amogus.points[i].x *= AMOGUS_SCALE;
 		g_amogus.points[i].y *= AMOGUS_SCALE;
 		if(g_amogus.points[i].x > width)
 			width = g_amogus.points[i].x;
@@ -57,8 +55,7 @@ void amogus_init()
 	g_amogus.size = vec2_len(vec2_create_2(width, height));
 
 	for(size_t i = 0; i < AMOGUS_POINTS_LEN; ++i)
-	{
-		g_amogus.points[i].y += is_width_larger * (width - height);// + g_amogus.size;
+	{	g_amogus.points[i].y += is_width_larger * (width - height);// + g_amogus.size;
 		g_amogus.points[i].x += !is_width_larger * (height - width);// + g_amogus.size;
 	}
 	//g_amogus.size *= 5;
@@ -66,28 +63,26 @@ void amogus_init()
 }
 
 void amogus_rotate(float angle)
-{
-	static bool passed = false;
+{	static bool passed = false;
 	if(!angle)// || passed)
 		return;
 	POINT center_point = get_amogus_center();
 	struct vec2 center = vec2_create_2(center_point.x, center_point.y);
 	for(size_t i = 0; i < AMOGUS_POINTS_LEN; ++i)
-	{
-//		double i_rad = i * 10 * DEG_TO_RAD;
-//		double i_sin = sin(i_rad);
-//		g_amogus.points[i].x = center.x + i * 10;
-//		g_amogus.points[i].y = center.y + i * 10;
-//		g_amogus.points[i].x = center.x + sin(i * 10 * DEG_TO_RAD) * 100;
-//		g_amogus.points[i].y = center.y + cos(i * 10 * DEG_TO_RAD) * 100;
+	{	//	double i_rad = i * 10 * DEG_TO_RAD;
+		//	double i_sin = sin(i_rad);
+		//	g_amogus.points[i].x = center.x + i * 10;
+		//	g_amogus.points[i].y = center.y + i * 10;
+		//	g_amogus.points[i].x = center.x + sin(i * 10 * DEG_TO_RAD) * 100;
+		//	g_amogus.points[i].y = center.y + cos(i * 10 * DEG_TO_RAD) * 100;
 
 		struct vec2 point = vec2_create_2(g_amogus.points_original[i].x, g_amogus.points_original[i].y);
-//		double point_len = vec2_len(point);
+		//	double point_len = vec2_len(point);
 		struct vec2 point_relative = vec2_sub_2(point, center);
 		// todo find out why in the fuck I have to do that
 		point_relative.x = -point_relative.x;
 		double point_relative_len = vec2_len(point_relative);
-//		assert(point_relative_len);
+		//	assert(point_relative_len);
 		double new_angle = vec2_angle_of(point_relative) - angle - g_amogus.angle - 90;
 		double new_angle_rad = new_angle * DEG_TO_RAD;
 		struct vec2 rotated_vector = vec2_normalize(vec2_create_2(sin(new_angle_rad), cos(new_angle_rad)));
@@ -108,11 +103,9 @@ void amogus_rotate(float angle)
 }
 
 POINT get_amogus_center()
-{
-	size_t x = 0, y = 0;
+{	size_t x = 0, y = 0;
 	for(size_t i = 0; i < AMOGUS_POINTS_LEN; ++i)
-	{
-		x += g_amogus.points_original[i].x;
+	{	x += g_amogus.points_original[i].x;
 		y += g_amogus.points_original[i].y;
 	}
 	x /= AMOGUS_POINTS_LEN;

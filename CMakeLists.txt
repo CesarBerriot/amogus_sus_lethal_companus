@@ -3,17 +3,18 @@ project(custom_shaped_window C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(custom_shaped_window main.c
-        window.c
-        window.h
-        globals.c
-        globals.h
-        amogus/amogus.c
-        amogus/amogus.h
-        "data structures/vec2/vec2.h"
-        "data structures/vec2/vec2.c")
+add_executable(custom_shaped_window
+        "src/main.c"
+        "src/window.c"
+        "src/window.h"
+        "src/globals.c"
+        "src/globals.h"
+        "src/amogus/amogus.c"
+        "src/amogus/amogus.h"
+        "src/data structures/vec2/vec2.h"
+        "src/data structures/vec2/vec2.c")
 
-target_include_directories(custom_shaped_window PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(custom_shaped_window PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 target_compile_options(custom_shaped_window PRIVATE
         -O0

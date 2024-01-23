@@ -7,14 +7,12 @@
 #include <windows.h>
 
 enum
-{
-	AMOGUS_POINTS_LEN = 25,
+{	AMOGUS_POINTS_LEN = 25,
 	AMOGUS_SCALE = 3,
 };
 
 extern struct g_amogus_struct
-{
-	POINT points_original[AMOGUS_POINTS_LEN];
+{	POINT points_original[AMOGUS_POINTS_LEN];
 	POINT points[AMOGUS_POINTS_LEN];
 	size_t size; // pixels
 	double angle;
