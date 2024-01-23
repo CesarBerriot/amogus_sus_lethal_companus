@@ -38,14 +38,14 @@ void * window_interaction_thread_proc(void *)
 			pos.left += g_amogus.size / 2;
 			pos.top += g_amogus.size / 2;
 			axes = vec2_add_2(axes
-							  , vec2_mult(vec2_normalize(vec2_create_2(cursor_pos.x - pos.left, cursor_pos.y - pos.top))
-										  , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
+			                  , vec2_mult(vec2_normalize(vec2_create_2(cursor_pos.x - pos.left, cursor_pos.y - pos.top))
+			                              , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
 		}
 		else
 		{	axes = vec2_add_2(axes, vec2_mult(
-								  vec2_normalize(vec2_create_2(g_logic.pressed_keys.right - g_logic.pressed_keys.left
-															   , g_logic.pressed_keys.down - g_logic.pressed_keys.up))
-								  , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
+			                      vec2_normalize(vec2_create_2(g_logic.pressed_keys.right - g_logic.pressed_keys.left
+			                                                   , g_logic.pressed_keys.down - g_logic.pressed_keys.up))
+			                      , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
 		}
 
 		amogus_rotate(axes.horizontal * WINDOW_ROTATION_SPEED_FACTOR * delta_time);
@@ -97,10 +97,10 @@ void create_window()
 	wndclass.lpfnWndProc = window_proc;
 	RegisterClassA(&wndclass);
 	g_logic.window =
-		CreateWindowExA(
-			0//WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT
-			, WINDOW_CLASS_NAME, "amogus sus lethal companus", WS_OVERLAPPEDWINDOW// WS_POPUP | WS_VISIBLE
-			, 0, 0, g_amogus.size, g_amogus.size, NULL, NULL, NULL, NULL);
+	    CreateWindowExA(
+	        0//WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT
+	        , WINDOW_CLASS_NAME, "amogus sus lethal companus", WS_OVERLAPPEDWINDOW// WS_POPUP | WS_VISIBLE
+	        , 0, 0, g_amogus.size, g_amogus.size, NULL, NULL, NULL, NULL);
 	SetWindowLong(g_logic.window, GWL_STYLE, 0);
 	ShowWindow(g_logic.window, SW_SHOW);
 	SetWindowRgn(g_logic.window, CreatePolygonRgn(g_amogus.points, AMOGUS_POINTS_LEN, WINDING), true);

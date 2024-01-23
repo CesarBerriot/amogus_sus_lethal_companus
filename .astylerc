@@ -2,7 +2,7 @@
 style=horstmann
 
 ### Tab Options
-indent=force-tab
+indent=tab
 
 ### Brace Modify Options
 attach-closing-while
@@ -37,6 +37,8 @@ attach-return-type
 attach-return-type-decl
 # for switch case breaks
 keep-one-line-statements
+# for inline functions
+keep-one-line-blocks
 # for xmacros (.def) formatting
 mode=c
 
