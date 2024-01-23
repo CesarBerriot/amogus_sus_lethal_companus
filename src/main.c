@@ -73,5 +73,4 @@ void kill_kbd_hook()
 void send_key(uint8_t key, bool down)
 {	INPUT input;
 	memset(&input, 0, sizeof(INPUT));
-
 }
