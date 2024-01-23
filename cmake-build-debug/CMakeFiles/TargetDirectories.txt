@@ -1,3 +1,0 @@
-C:/Users/BERR1207/Documents/GitHub/amogus_sus_lethal_companus/cmake-build-debug/CMakeFiles/custom_shaped_window.dir
-C:/Users/BERR1207/Documents/GitHub/amogus_sus_lethal_companus/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/BERR1207/Documents/GitHub/amogus_sus_lethal_companus/cmake-build-debug/CMakeFiles/rebuild_cache.dir
