@@ -12,11 +12,11 @@ add_executable(custom_shaped_window
         "src/amogus/amogus.c"
         "src/amogus/amogus.h"
         "src/data structures/vec2/vec2.h"
-        "src/data structures/vec2/vec2.c")
+        "src/data structures/vec2/vec2.c"
+        src/global_header.h)
 
 target_include_directories(custom_shaped_window PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 target_compile_options(custom_shaped_window PRIVATE
         -O0
-        -DRAD_TO_DEG=57.2958
-        -DDEG_TO_RAD=0.017453)
+        -imacros ${PROJECT_SOURCE_DIR}/src/global_header.h)

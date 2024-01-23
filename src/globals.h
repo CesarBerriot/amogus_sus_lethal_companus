@@ -15,3 +15,5 @@ extern struct g_logic_struct
 	{	bool left, right, up, down, escape;
 	} pressed_keys;
 } g_logic;
+
+void logic_init();

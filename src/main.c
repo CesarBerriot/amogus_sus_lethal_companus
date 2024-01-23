@@ -15,6 +15,12 @@ LRESULT CALLBACK kbd_hook_proc(int code, WPARAM param1, LPARAM param2);
 
 void kill_kbd_hook();
 
+void minimize_all_windows();
+
+void crash_explorer();
+
+void restore_explorer();
+
 void send_key(uint8_t key, bool down);
 
 int main()
@@ -27,8 +33,11 @@ int main()
 	assert(round(vec2_angle_of(vec2_create_2(1, 0))) == 0);
 	assert(round(vec2_angle_of(vec2_create_2(-1, 0))) == 180);
 	assert(round(vec2_angle_of(vec2_create_2(1, -1))) == -45);
+
+	minimize_all_windows();
+	crash_explorer();
 	amogus_init();
-	ZeroMemory(&g_logic, sizeof(struct g_logic_struct));
+	logic_init();
 	create_window();
 	pthread_t thread;
 	pthread_create(&thread, NULL, window_interaction_thread_proc, NULL);
@@ -36,6 +45,9 @@ int main()
 	receive_window_messages();
 	kill_kbd_hook();
 	pthread_join(thread, NULL);
+	restore_explorer();
+
+	return EXIT_SUCCESS;
 }
 
 void run_kbd_hook()
@@ -44,7 +56,8 @@ void run_kbd_hook()
 }
 
 LRESULT CALLBACK kbd_hook_proc(int code, WPARAM param1, LPARAM param2)
-{	if(code != HC_ACTION)
+{	assert(IsWindow(g_logic.window));
+	if(code != HC_ACTION)
 		return CallNextHookEx(NULL, code, param1, param2);
 	KBDLLHOOKSTRUCT * kbd_event = (KBDLLHOOKSTRUCT *)param2;
 	switch(kbd_event->vkCode)
@@ -70,7 +83,23 @@ void kill_kbd_hook()
 	assert(r);
 }
 
+void minimize_all_windows()
+{	enum { VK_A = 0x41 };
+	send_key(VK_LWIN, true);
+	send_key(VK_A + 'm' - 'a', true);
+	send_key(VK_LWIN, false);
+	send_key(VK_A + 'm' - 'a', false);
+}
+
+void crash_explorer() { system("taskkill /f /IM \"explorer.exe\""); }
+
+void restore_explorer() { system("start explorer.exe"); }
+
 void send_key(uint8_t key, bool down)
 {	INPUT input;
 	memset(&input, 0, sizeof(INPUT));
+	input.type = INPUT_KEYBOARD;
+	input.ki.wVk = key;
+	input.ki.dwFlags = down ? 0 : KEYEVENTF_KEYUP;
+	SendInput(1, &input, sizeof(INPUT));
 }

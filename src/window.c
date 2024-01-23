@@ -50,8 +50,8 @@ void * window_interaction_thread_proc(void *)
 
 		amogus_rotate(axes.horizontal * WINDOW_ROTATION_SPEED_FACTOR * delta_time);
 
-		int8_t horizontal = axes.horizontal;
-		int8_t vertical = axes.vertical;
+		int16_t horizontal = axes.horizontal;
+		int16_t vertical = axes.vertical;
 
 		axes = vec2_sub_2(axes, vec2_create_2(horizontal, vertical));
 
@@ -69,7 +69,7 @@ void * window_interaction_thread_proc(void *)
 	refresh_delta_time_label:
 		last_timeval = current_timeval;
 	}
-	CloseWindow(g_logic.window);
+	SendMessageA(g_logic.window, CUSTOM_WINDOW_MESSAGE(WM_DESTRUCTION_REQUIREMENT), 0, 0);
 }
 
 LRESULT CALLBACK window_proc(HWND window, UINT msg, WPARAM param1, LPARAM param2)
@@ -84,7 +84,23 @@ LRESULT CALLBACK window_proc(HWND window, UINT msg, WPARAM param1, LPARAM param2
 			//return UpdateLayeredWindow()
 			return 0;
 		}
+		case WM_CLOSE:
+			break;
+		case WM_QUIT:
+			break;
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			//assert(0);
+			break;
 		default:
+			if(msg == CUSTOM_WINDOW_MESSAGE(WM_DESTRUCTION_REQUIREMENT))
+			{	bool r;
+				r = CloseWindow(g_logic.window);
+				assert(r);
+				r = DestroyWindow(g_logic.window);
+				assert(r);
+				// PostQuitMessage(0);
+			}
 			break;
 	}
 	return DefWindowProcA(window, msg, param1, param2);
@@ -109,8 +125,14 @@ void create_window()
 
 void receive_window_messages()
 {	MSG msg;
-	while(GetMessageA(&msg, g_logic.window, 0, 0))
-	{	TranslateMessage(&msg);
-		DispatchMessageA(&msg);
-	}
+	// yeah so I had to end up doing this bc fsr I couldn't find out after
+	// over an hour of analysing thread call stacks and memory why the
+	// GetMessageA function would straight up never return instead of
+	// eventually returning 0 when the window passed to it by the
+	// second argument gets destroyed
+	while(IsWindow(g_logic.window))
+		if(PeekMessageA(&msg, g_logic.window, 0, 0, PM_REMOVE))
+		{	TranslateMessage(&msg);
+			DispatchMessageA(&msg);
+		}
 }
