@@ -7,7 +7,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <assert.h>
-#include <float.h>
 #include "globals.h"
 #include "amogus/amogus.h"
 #include "data structures/vec2/vec2.h"
@@ -37,14 +36,19 @@ void * window_interaction_thread_proc(void *)
 			assert(r);
 			pos.left += g_amogus.size / 2;
 			pos.top += g_amogus.size / 2;
+			struct vec2 amogus_to_cursor = vec2_create_2(cursor_pos.x - pos.left, cursor_pos.y - pos.top);
+			double len = vec2_len(amogus_to_cursor);
+			if(len < 10) // todo change to smth easier to modify
+				SetWindowPos(g_logic.window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
 			axes = vec2_add_2(axes
-			                  , vec2_mult(vec2_normalize(vec2_create_2(cursor_pos.x - pos.left, cursor_pos.y - pos.top))
+			                  , vec2_mult(vec2_normalize_2(amogus_to_cursor, len)
 			                              , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
 		}
 		else
 		{	axes = vec2_add_2(axes, vec2_mult(
 			                      vec2_normalize(vec2_create_2(g_logic.pressed_keys.right - g_logic.pressed_keys.left
 			                                                   , g_logic.pressed_keys.down - g_logic.pressed_keys.up))
+
 			                      , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
 		}
 

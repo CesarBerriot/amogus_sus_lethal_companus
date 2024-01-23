@@ -32,4 +32,5 @@ __forceinline struct vec2 vec2_sub_2(struct vec2 vec, struct vec2 other) { retur
 __forceinline double vec2_squared_len(struct vec2 vec) { return pow(vec.x, 2) + pow(vec.y, 2); }
 __forceinline double vec2_len(struct vec2 vec) { return sqrt(vec2_squared_len(vec)); }
 __forceinline struct vec2 vec2_normalize(struct vec2 vec) { double len = vec2_len(vec);	return len ? vec2_div(vec, len) : vec2_create(0); }
+__forceinline struct vec2 vec2_normalize_2(struct vec2 vec, double len) { return len ? vec2_div(vec, len) : vec2_create(0); }
 __forceinline double vec2_angle_of(struct vec2 vec) { return atan2(vec.y, vec.x) * RAD_TO_DEG; }
