@@ -1,6 +1,8 @@
 .idea/*
 cmake-build-debug/*
 cmake-build-release/*
+cmake-build-relwithdebinfo/*
+cmake-build-minsizerel/*
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles

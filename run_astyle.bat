@@ -1,1 +1,1 @@
-astyle-3.4.11.exe --project ./src/*.c,*.h,*.def
+start ./astyle/astyle-3.4.11.exe --project ./src/*.c,*.h,*.def
