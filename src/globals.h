@@ -11,6 +11,7 @@ extern struct g_logic_struct
 {	HWND window;
 	HHOOK kbd_hook;
 	bool mouse_follow_mode;
+	double window_speed;
 	struct
 	{	bool left, right, up, down, escape;
 	} pressed_keys;

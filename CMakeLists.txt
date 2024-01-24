@@ -13,7 +13,13 @@ add_executable(custom_shaped_window
         "src/amogus/amogus.h"
         "src/data structures/vec2/vec2.h"
         "src/data structures/vec2/vec2.c"
-        src/global_header.h)
+        "src/global_header.h"
+        "src/resources/lethal_company_icecream_music.binh"
+        "src/resources/vine_boom_sfx.binh"
+        src/audio/audio.c
+        src/audio/audio.h)
+
+target_link_libraries(custom_shaped_window PRIVATE winmm.lib)
 
 target_include_directories(custom_shaped_window PRIVATE ${PROJECT_SOURCE_DIR}/src)
 

@@ -8,6 +8,7 @@
 #include "window.h"
 #include "amogus/amogus.h"
 #include "data structures/vec2/vec2.h"
+#include "audio/audio.h"
 
 void run_kbd_hook();
 
@@ -36,15 +37,27 @@ int main()
 
 	minimize_all_windows();
 	crash_explorer();
+
 	amogus_init();
 	logic_init();
 	create_window();
+
+	audio_init();
+	audio_play_sound(AUDIO_VINE_BOOM);
+
 	pthread_t thread;
 	pthread_create(&thread, NULL, window_interaction_thread_proc, NULL);
+
 	run_kbd_hook();
+
+	//audio_play_sound(AUDIO_LETHAL_COMPANY_ICECREAM_MUSIC);
+
 	receive_window_messages();
+
 	kill_kbd_hook();
+
 	pthread_join(thread, NULL);
+
 	restore_explorer();
 
 	return EXIT_SUCCESS;
@@ -56,8 +69,7 @@ void run_kbd_hook()
 }
 
 LRESULT CALLBACK kbd_hook_proc(int code, WPARAM param1, LPARAM param2)
-{	assert(IsWindow(g_logic.window));
-	if(code != HC_ACTION)
+{	if(code != HC_ACTION)
 		return CallNextHookEx(NULL, code, param1, param2);
 	KBDLLHOOKSTRUCT * kbd_event = (KBDLLHOOKSTRUCT *)param2;
 	switch(kbd_event->vkCode)
